@@ -4,6 +4,10 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Cette ligne force l'utilisation de Node.js 24 pour éliminer l'avertissement
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
@@ -11,9 +15,8 @@ jobs:
     - name: Generate JSON list of images
       run: |
         echo "[" > images.json
-        # Liste toutes les images dans le dossier (ex: dossier "photos")
         first=true
-        for file in photos/*.{png,PNG,webp,WEBP}; do
+        for file in photos/*.{jpg,jpeg,png,JPG,JPEG,PNG}; do
           if [ -f "$file" ]; then
             if [ "$first" = true ]; then first=false; else echo "," >> images.json; fi
             echo "  \"$file\"" >> images.json
