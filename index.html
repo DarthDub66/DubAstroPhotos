@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Galerie Astro</title>
+    <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover; /* Recadre en vignette propre */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mes Photos Astronomiques</h1>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        // Charger le fichier JSON généré automatiquement
+        fetch('images.json')
+            .then(response => response.json())
+            .then(images => {
+                const gallery = document.getElementById('gallery');
+                images.forEach(path => {
+                    // Créer un lien vers la photo pleine résolution
+                    const link = document.createElement('a');
+                    link.href = path;
+                    link.target = '_blank';
+
+                    // Créer la vignette
+                    const img = document.createElement('img');
+                    img.src = path;
+                    img.alt = "Photo Astro";
+
+                    link.appendChild(img);
+                    gallery.appendChild(link);
+                });
+            })
+            .catch(err => console.error("Erreur de chargement des images:", err));
+    </script>
+
+</body>
+</html>
